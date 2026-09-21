@@ -5,7 +5,7 @@ import { EnvConfiguration } from './config/app.config';
 import { JoiValidationSchema } from './config/joi.validation';
 import { MongooseModule } from '@nestjs/mongoose';
 
-// ! SECTION 01 DATA BASE AND ENDPOINTS CONFIG
+// ! SECTION 02 BUILD SEED
 
 @Module({
   imports: [
