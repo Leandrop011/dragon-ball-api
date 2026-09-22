@@ -4,6 +4,7 @@ import { DragonBallController } from './dragon-ball.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DragonBallCharacter, DragonCharacterSchema } from './entities/dragon-ball.entity';
 import { ConfigModule } from '@nestjs/config';
+import { AxiosAdapter } from '../common/adapter/axios.adapter';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
       }
     ]),
   ],
+  exports: [MongooseModule], // * exportamos el module de mongoose
   controllers: [DragonBallController],
   providers: [DragonBallService],
 })

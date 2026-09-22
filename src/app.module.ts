@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { DragonBallModule } from './dragon-ball/dragon-ball.module';
 import { ConfigModule } from '@nestjs/config';
 import { EnvConfiguration } from './config/app.config';
-import { JoiValidationSchema } from './config/joi.validation';
 import { MongooseModule } from '@nestjs/mongoose';
+import { SeedModule } from './seed/seed.module';
+import { CommonModule } from './common/common.module';
 
 // ! SECTION 02 BUILD SEED
 
@@ -25,9 +26,11 @@ import { MongooseModule } from '@nestjs/mongoose';
       {dbName: 'nest-dragonball'}
     ),
 
-    DragonBallModule
+    DragonBallModule,
+
+    SeedModule,
+
+    CommonModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
