@@ -6,7 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { SeedModule } from './seed/seed.module';
 import { CommonModule } from './common/common.module';
 
-// ! SECTION 02 BUILD SEED
+// ! SECTION 03 RESOURCE PUBLIC
 
 @Module({
   imports: [
