@@ -8,7 +8,7 @@ import { CommonModule } from './common/common.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
-// ! SECTION 03 RESOURCE PUBLIC
+// ! SECTION 04 DOCKERIZE APP
 @Module({
   imports: [
     
