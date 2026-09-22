@@ -16,6 +16,11 @@ and delete Dragon Ball character records. All data is persisted in a MongoDB
 database, which makes it easy to scale the project and add new features later
 on (authentication, pagination, filters, sagas, techniques, transformations).
 
+## SITE WEB
+```
+http://localhost:3000/
+```
+
 ## Project setup
 
 ```bash

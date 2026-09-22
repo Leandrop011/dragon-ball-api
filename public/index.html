@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interfaz web para probar los endpoints de la Dragon Ball API hecha con NestJS.">
+  <meta name="color-scheme" content="dark">
+  <title>Dragon Ball API · Panel de pruebas</title>
+
+  <!-- ? Logo de la app usado también como icono de pestaña -->
+  <link rel="icon" type="image/png" href="/logo_app.png">
+  <link rel="apple-touch-icon" href="/logo_app.png">
+
+  <!-- ? Único recurso externo permitido: Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- ! ===================== SKIP LINK (accesibilidad) ===================== -->
+  <a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+  <!-- ! ===================== FONDO DECORATIVO (solo formas/gradientes) ===================== -->
+  <div class="bg-decor" aria-hidden="true">
+    <span class="orb orb--1"></span>
+    <span class="orb orb--2"></span>
+    <span class="orb orb--3"></span>
+  </div>
+
+
+  <!-- ! ===================== VISTA 404 ===================== -->
+  <section class="notfound" id="view-404" aria-labelledby="notfound-title" hidden>
+    <div class="wrap notfound__inner">
+
+      <div class="notfound__brand" style="--i: 0">
+        <img
+          class="notfound__logo"
+          src="/logo_app.png"
+          alt=""
+          width="512"
+          height="512"
+          decoding="async">
+      </div>
+
+      <p class="notfound__code" style="--i: 1" aria-hidden="true">404</p>
+
+      <h1 class="notfound__title" id="notfound-title" style="--i: 2">
+        Esta ruta no existe en el radar
+      </h1>
+
+      <p class="notfound__text" style="--i: 3">
+        No hay ninguna página en <code class="notfound__path" id="notfound-path">/</code>.
+        Si desea probar los demas endpoints usar otros programas( ejem: Postman ). 
+      </p>
+
+      <a class="btn btn--primary btn--home" href="/" id="btn-home" style="--i: 4">
+        Volver al inicio
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ! ===================== HERO ===================== -->
+  <header class="hero" id="top">
+    <div class="wrap hero__inner">
+
+      <div class="hero__copy">
+        <div class="hero__brand animate-in" style="--delay: 0ms">
+          <img
+            class="hero__logo"
+            src="/logo_app.png"
+            alt="Logo de Dragon Ball API"
+            width="512"
+            height="512"
+            decoding="async">
+        </div>
+
+        <p class="hero__eyebrow animate-in" style="--delay: 80ms">NestJS · MongoDB · REST</p>
+        <h1 class="hero__title animate-in" style="--delay: 150ms">
+          Dragon&nbsp;Ball <span class="hero__title-accent">API</span>
+        </h1>
+        <p class="hero__lead animate-in" style="--delay: 230ms">
+          Panel para probar los endpoints del backend: listar con paginación, buscar por
+          número, nombre o Mongo ID, crear personajes y ejecutar el seed.
+        </p>
+
+        <div class="hero__badges animate-in" style="--delay: 300ms">
+          <span class="chip">GET /dragon-ball</span>
+          <span class="chip">GET /dragon-ball/:term</span>
+          <span class="chip">POST /dragon-ball</span>
+          <span class="chip chip--muted">GET /seed</span>
+        </div>
+      </div>
+
+      <!-- ? Configuración de la base URL -->
+      <section class="card card--config animate-in" style="--delay: 380ms" aria-labelledby="config-title">
+        <h2 class="card__title" id="config-title">Configuración</h2>
+
+        <div class="field">
+          <label class="field__label" for="base-url">Base URL de la API</label>
+          <div class="field__row">
+            <input
+              class="input input--mono"
+              type="url"
+              id="base-url"
+              name="base-url"
+              spellcheck="false"
+              autocomplete="off"
+              placeholder="http://localhost:3000/api/v1"
+              aria-describedby="base-url-help">
+            <button class="btn btn--ghost" type="button" id="btn-reset-url">Restaurar</button>
+          </div>
+          <p class="field__help" id="base-url-help">
+            Se guarda en <code>localStorage</code>. Sin barra final.
+          </p>
+        </div>
+
+        <div class="config__actions">
+          <button class="btn btn--ghost btn--sm" type="button" id="btn-ping">Probar conexión</button>
+          <button class="btn btn--danger btn--sm" type="button" id="btn-seed">Ejecutar seed</button>
+        </div>
+        <p class="field__help">
+          El seed <strong>borra</strong> la base de datos y la repuebla con 58 personajes.
+        </p>
+      </section>
+
+    </div>
+  </header>
+
+  <main id="main" class="wrap main-grid">
+
+    <!-- ! ===================== COLUMNA IZQUIERDA ===================== -->
+    <div class="col col--left">
+
+      <!-- ? ---------- BUSCAR POR TÉRMINO ---------- -->
+      <section class="card reveal" aria-labelledby="search-title">
+        <header class="card__head">
+          <h2 class="card__title" id="search-title">Buscar personaje</h2>
+          <span class="tag tag--get">GET /dragon-ball/:term</span>
+        </header>
+
+        <form class="form" id="form-search" novalidate>
+          <div class="field">
+            <label class="field__label" for="search-term">Número, nombre o Mongo ID</label>
+            <div class="field__row">
+              <input
+                class="input"
+                type="text"
+                id="search-term"
+                name="term"
+                autocomplete="off"
+                placeholder="goku, 1 o 6650b1f..."
+                aria-describedby="search-help">
+              <button class="btn btn--primary" type="submit">Buscar</button>
+            </div>
+            <p class="field__help" id="search-help">
+              El nombre se envía en minúsculas y sin espacios sobrantes.
+            </p>
+          </div>
+        </form>
+
+        <div class="result-slot" id="search-result" aria-live="polite" aria-busy="false"></div>
+      </section>
+
+      <!-- ? ---------- CREAR PERSONAJE ---------- -->
+      <section class="card reveal" aria-labelledby="create-title">
+        <header class="card__head">
+          <h2 class="card__title" id="create-title">Crear personaje</h2>
+          <span class="tag tag--post">POST /dragon-ball</span>
+        </header>
+
+        <form class="form" id="form-create" novalidate>
+
+          <div class="field">
+            <label class="field__label" for="create-num">Número de personaje *</label>
+            <input
+              class="input"
+              type="number"
+              id="create-num"
+              name="numCharacter"
+              min="1"
+              step="1"
+              inputmode="numeric"
+              autocomplete="off"
+              placeholder="59"
+              aria-describedby="err-num">
+            <p class="field__error" id="err-num" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="create-name">Nombre *</label>
+            <input
+              class="input"
+              type="text"
+              id="create-name"
+              name="name"
+              autocomplete="off"
+              placeholder="bardock"
+              aria-describedby="err-name">
+            <p class="field__error" id="err-name" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="create-level">Nivel de poder (ki) *</label>
+            <input
+              class="input"
+              type="number"
+              id="create-level"
+              name="levelCharacter"
+              min="1"
+              step="1"
+              inputmode="numeric"
+              autocomplete="off"
+              placeholder="9000"
+              aria-describedby="err-level">
+            <p class="field__error" id="err-level" role="alert"></p>
+          </div>
+
+          <div class="form__actions">
+            <button class="btn btn--primary" type="submit" id="btn-create">Crear personaje</button>
+            <button class="btn btn--ghost" type="reset" id="btn-clear-create">Limpiar</button>
+          </div>
+        </form>
+
+        <div class="result-slot" id="create-result" aria-live="polite" aria-busy="false"></div>
+      </section>
+
+      <!-- ? ---------- PANEL TIPO MINI POSTMAN ---------- -->
+      <section class="card card--console reveal" aria-labelledby="console-title">
+        <header class="card__head">
+          <h2 class="card__title" id="console-title">Respuesta</h2>
+          <button class="btn btn--ghost btn--sm" type="button" id="btn-copy-response">Copiar JSON</button>
+        </header>
+
+        <div class="console" id="console" aria-live="polite">
+          <div class="console__meta">
+            <span class="pill pill--method" id="console-method">—</span>
+            <span class="pill pill--status pill--idle" id="console-status">—</span>
+            <span class="pill pill--time" id="console-time">—</span>
+          </div>
+          <p class="console__url" id="console-url">Todavía no se ha hecho ninguna petición.</p>
+          <pre class="console__body"><code id="console-json">// Aquí verás el cuerpo de la respuesta.</code></pre>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ! ===================== COLUMNA DERECHA: LISTADO ===================== -->
+    <div class="col col--right">
+      <section class="card reveal" aria-labelledby="list-title">
+        <header class="card__head">
+          <h2 class="card__title" id="list-title">Listado de personajes</h2>
+          <span class="tag tag--get">GET /dragon-ball</span>
+        </header>
+
+        <form class="form form--inline" id="form-list" novalidate>
+          <div class="field field--tight">
+            <label class="field__label" for="list-limit">limit</label>
+            <input
+              class="input input--num"
+              type="number"
+              id="list-limit"
+              name="limit"
+              min="1"
+              step="1"
+              value="5"
+              inputmode="numeric"
+              aria-describedby="err-limit">
+          </div>
+
+          <div class="field field--tight">
+            <label class="field__label" for="list-offset">offset</label>
+            <input
+              class="input input--num"
+              type="number"
+              id="list-offset"
+              name="offset"
+              min="0"
+              step="1"
+              value="0"
+              inputmode="numeric"
+              aria-describedby="err-offset">
+          </div>
+
+          <button class="btn btn--primary" type="submit">Consultar</button>
+        </form>
+        <p class="field__error" id="err-limit" role="alert"></p>
+        <p class="field__error" id="err-offset" role="alert"></p>
+        <p class="field__help">
+          <code>offset = 0</code> no se envía al backend (la API lo rechaza con 400).
+        </p>
+
+        <div class="pager">
+          <button class="btn btn--ghost btn--sm" type="button" id="btn-prev" disabled>&larr; Anterior</button>
+          <span class="pager__info" id="pager-info">offset 0</span>
+          <button class="btn btn--ghost btn--sm" type="button" id="btn-next">Siguiente &rarr;</button>
+        </div>
+
+        <div class="list-slot" id="list-result" aria-live="polite" aria-busy="false"></div>
+      </section>
+    </div>
+
+  </main>
+
+  <footer class="footer wrap">
+    <p>
+      Desarrollado con NestJs por SoftDo - Proyecto de fans sin fines de lucro. 
+      Dragon Ball es propiedad de Akira Toriyama, Shueisha y Toei Animation.
+    </p>
+  </footer>
+
+  <!-- ! ===================== TOASTS ===================== -->
+  <div class="toasts" id="toasts" role="status" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- ! ===================== DIÁLOGO DE CONFIRMACIÓN DEL SEED ===================== -->
+  <dialog class="modal" id="seed-dialog" aria-labelledby="seed-dialog-title">
+    <form method="dialog" class="modal__form">
+      <h2 class="modal__title" id="seed-dialog-title">¿Ejecutar el seed?</h2>
+      <p class="modal__text">
+        Esta acción <strong>elimina todos los personajes</strong> de la base de datos y la vuelve
+        a llenar con los 58 personajes por defecto. No se puede deshacer.
+      </p>
+      <div class="modal__actions">
+        <button class="btn btn--ghost" type="submit" value="cancel">Cancelar</button>
+        <button class="btn btn--danger" type="submit" value="confirm" id="seed-confirm">Sí, ejecutar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

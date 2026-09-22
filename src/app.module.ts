@@ -5,9 +5,10 @@ import { EnvConfiguration } from './config/app.config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SeedModule } from './seed/seed.module';
 import { CommonModule } from './common/common.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 // ! SECTION 03 RESOURCE PUBLIC
-
 @Module({
   imports: [
     
@@ -19,6 +20,11 @@ import { CommonModule } from './common/common.module';
         // validationSchema: JoiValidationSchema,
       },
     ),
+
+    // ? Servir contenido estatico
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public')
+    }),
 
     // ? conexion to DB
     MongooseModule.forRoot(
