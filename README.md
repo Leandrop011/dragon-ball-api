@@ -34,7 +34,7 @@ $ yarn install
 $ yarn run start
 
 # watch mode
-$ yarn run start:dev
+$ yarn start:dev
 
 # production mode
 $ yarn run start:prod
@@ -64,15 +64,11 @@ yarn install
 ```
 3. Renombrar el archivo .env-template a ```.env```.
 4. Configurar las respectivas variables de entorno.
-5. Levantar la Base de Datos
+5. Levantar y construir el proyecto
 ```
-docker compose up -d
+docker compose -f docker-compose.yaml up --build
 ```
-6. Levantar el proyecto en modo desarrollo
-```
-yarn start:dev
-```
-7. Llenar de informacion a la Base de datos, ejecutar la seed:
+6. Llenar de informacion a la Base de datos, ejecutar la seed:
 ```
 http://localhost:3000/api/v1/seed/
 ```

@@ -1,13 +1,30 @@
+# ! DOCKER COMPOSE QUE LEVANTARA LA APP Y LA DB
 
 version: '3'
 
 services:
+  dragonballapp:
+    depends_on:
+      - db
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: mongo-ball
+    container_name: dragonball-app
+    restart: always
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      MONGODB: ${MONGODB}
+      PORT: ${PORT}
   db:
     image: mongo:5
     restart: always
+    container_name: mongo-ball
     ports:
       - 27017:27017
     environment:
-      MONGODB_DATABASE: nest-dragonball
+      MONGODB_DATABASE: mongo-ball-db
     volumes:
-      - ./mongo:/data/db
+      - ./mongo:/data/db  
+
